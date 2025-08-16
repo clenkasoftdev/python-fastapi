@@ -34,6 +34,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Load .env into job environment
+        run: |
+          if [ -f .env ]; then
+            while IFS= read -r line || [ -n "$line" ]; do
+              # skip empty lines and comments
+              if [[ -z "$line" || "$line" == \#* ]]; then
+                continue
+              fi
+              echo "$line" >> $GITHUB_ENV
+            done < .env
+          fi
+
       - name: Check env vars exist
         run: |
           echo "COGNITO_REGION set: ${COGNITO_REGION:+yes}"
