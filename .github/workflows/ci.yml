@@ -34,6 +34,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Check env vars exist
+        run: |
+          echo "COGNITO_REGION set: ${COGNITO_REGION:+yes}"
+          echo "COGNITO_USERPOOL_ID set: ${COGNITO_USERPOOL_ID:+yes}"
+          echo "COGNITO_APP_CLIENT_ID set: ${COGNITO_APP_CLIENT_ID:+yes}"
+
       - name: Run tests
         run: |
           source .venv/bin/activate
