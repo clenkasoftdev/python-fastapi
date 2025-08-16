@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -21,4 +23,11 @@ class Settings(BaseSettings):
     app_client_id: str = Field(..., alias="cognito_app_client_id")
 
 
-settings = Settings()
+# Create a settings instance if environment variables are present.
+# In test runs we may not have env vars, and many tests inject a settings-like
+# object instead of relying on a global; avoid raising during import so tests
+# can import modules that reference `settings` without the real env configured.
+try:
+    settings: Optional[Settings] = Settings()
+except Exception:
+    settings = None
